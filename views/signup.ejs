@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+  <style>
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    form {
+      width: 400px;
+      height: 500px;
+      background-color: green;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      border-radius: 10px;
+
+    }
+
+    .input-box input {
+      height: 20px;
+      margin-bottom: 20px;
+      outline: none;
+      padding: 5px;
+      width: 250px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .wrapper h1 {
+      margin-top: -50px;
+      color: white;
+    }
+
+    .btn {
+      width: 250px;
+      padding: 5px;
+      border-radius: 5px;
+      padding: 8px;
+      margin-top: 10px;
+    }
+
+    h1{
+      margin-bottom: 70px;
+    }
+
+    .remember-forgot a{
+      text-decoration: none;
+      margin-top: 5px;
+      margin-left: 10px;
+      border: none;
+
+    }
+
+    .remember-forgot{
+      display: flex;
+      flex-direction: column;
+      /* align-items: center; */
+      justify-content: start;
+      margin: 10px;
+      margin-right: 155px;
+    }
+
+    .remember-forgot label{
+      color: white;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <form action="">
+      <h1>signup</h1>
+      <div class="input-box">
+        <input type="text" placeholder="email" name='email'required>
+        <div class="email error"></div>
+      </div>
+      <div class=""></div>
+      <div class="input-box">
+        <input type="password" placeholder="password" name='password' required>
+        <div class="password error"></div>
+      </div>
+      <div class="error"></div>
+      <div class="remember-forgot">
+        <!-- <label for=""><input type="checkbox">Remember Me</label> -->
+        <!-- <a href="">Register</a> -->
+      </div>
+      <button class="btn">Register</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.querySelector('.form');
+    const emailError = document.querySelector('.email.error')
+    const passwordError = document.querySelector('.password.error')
+
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = form.email.value;
+      const password = form.password.value;
+
+
+      try {
+        const res = await fetch('/signup', {
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+          headers: { 'content-type': 'application/json' }
+        })
+
+        const data = await res.json();
+        console.log(data)
+        if (data.errors) {
+          emailError.textContent = data.errors.email;
+          passwordError.textContent = data.errors.password;
+        }
+
+        if(data.user){
+          location.assign('/home')
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+
+    })
+  </script>
+
+</body>
+
+
+</html>
